@@ -1,17 +1,18 @@
 import {saveToLS, loadFromLS} from './helpers';
 import throttle from 'lodash.throttle';
 
-
 const refs = {
     formEl: document.querySelector('.feedback-form'),
 }
 function onLoad() {
-    const emailValue = loadFromLS('feedback-form-state').email;
-    refs.formEl.elements.email.value = emailValue || '';
-    const messageValue = loadFromLS('feedback-form-state').message
-    refs.formEl.elements.message.value = messageValue || '';
+    const objFromLS = loadFromLS('feedback-form-state');
+    if (objFromLS !== null) {
+        refs.formEl.elements.email.value = objFromLS.email;
+        refs.formEl.elements.message.value = objFromLS.message;
+    }  
 }
 onLoad();
+
 refs.formEl.addEventListener('submit', onFormSubmit);
 function onFormSubmit (e) {
     e.preventDefault();
@@ -27,7 +28,6 @@ function onFormSubmit (e) {
     console.log(objData);
     e.target.reset();
 }
-
 
 refs.formEl.addEventListener('input', throttle(e => {
     const obj = {};
